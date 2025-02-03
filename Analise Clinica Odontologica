@@ -1,0 +1,61 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Dados
+data = {
+    'Sala': ['Sala 1', 'Sala 2'],
+    'Tratamentos': [12, 19],
+    'Valor_Medio': [1200, 600]
+}
+df = pd.DataFrame(data)
+df['Valor_Total'] = df['Tratamentos'] * df['Valor_Medio']
+
+
+sns.set_theme(style="whitegrid")
+
+
+plt.figure(figsize=(15, 10))
+
+
+plt.subplot(2, 2, 1)
+sns.barplot(x='Sala', y='Tratamentos', data=df, palette=['#0088FE', '#00C49F'])
+plt.title('Quantidade de Tratamentos por Sala')
+plt.ylabel('Número de Tratamentos')
+plt.xlabel('')
+
+
+plt.subplot(2, 2, 2)
+sns.barplot(x='Sala', y='Valor_Medio', data=df, palette=['#0088FE', '#00C49F'])
+plt.title('Valor Médio por Tratamento')
+plt.ylabel('Valor (R$)')
+plt.xlabel('')
+
+
+plt.subplot(2, 2, 3)
+plt.pie(
+    df['Valor_Total'],
+    labels=df['Sala'],
+    autopct=lambda p: f'{p:.1f}%\nR$ {p * df["Valor_Total"].sum() / 100:,.0f}',
+    colors=['#0088FE', '#00C49F']
+)
+plt.title('Distribuição do Faturamento Total')
+
+
+plt.subplot(2, 2, 4)
+faturamento_total = df['Valor_Total'].sum()
+sns.barplot(x=['Clínica'], y=[faturamento_total], color='#FF8040')  # Cor laranja para destacar
+plt.title('Faturamento Total da Clínica')
+plt.ylabel('Faturamento Total (R$)')
+plt.xlabel('')
+
+plt.text(0, faturamento_total + 500, f'R$ {faturamento_total:,.2f}', ha='center', va='bottom', fontsize=12)
+
+
+plt.tight_layout(pad=3.0)
+plt.show()
+
+
+print("\nResumo Estatístico:")
+print(f"Faturamento Total: R$ {faturamento_total:,.2f}")
+print(f"Média de tratamentos por sala: {df['Tratamentos'].mean():.1f}")
